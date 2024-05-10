@@ -55,14 +55,14 @@ class UserLogin(BaseModel):
 class ForgotUser(BaseModel):
     username: str
 
-origins = ["http://lcp.ssa.onrender.com"]
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=origins,
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
+# origins = ["http://lcp.ssa.onrender.com"]
+# app.add_middleware(
+#     CORSMiddleware,
+#     allow_origins=origins,
+#     allow_credentials=True,
+#     allow_methods=["*"],
+#     allow_headers=["*"],
+# )
 
 
 model = load_model('model2_fit.h5')
