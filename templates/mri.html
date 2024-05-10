@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lung Cancer Prediction</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-image: url('./static/index.jpeg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            color: #fff; /* Set default text color */
+        }
+        h1 {
+            color: #073f54;
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            font-size: 40px;
+        }
+        form {
+            width: 500px;
+            height: 300px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 20px;
+            background-color: #ffffff94;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: black 0px 14px 28px,  0px 10px 10px;
+            
+        }
+        input[type="file"] {
+            display: none;
+        }
+        label {
+            background-color: #4793AF; 
+            color: #fff;
+            padding: 15px 20px;
+            border: 2px solid black;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        label:hover {
+            background-color: #19617b; 
+        }
+        button {
+            margin-top: 10px;
+            background-color: #4793AF; 
+            color: #fff;
+            padding: 15px 30px;
+            border: 2px solid black;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s; 
+        }
+
+        button:hover {
+            background-color: #19617b;
+        }
+        input[type="file"] + label {
+            margin-top: 10px;
+            color: #fff;
+        }
+        #file-name {
+            margin-top: 10px;
+            font-size: 18px;
+            color: black;
+        }
+    </style>
+</head>
+<body>
+ 
+    <form id="predict-form" method="post" action="/predict1" enctype="multipart/form-data">
+        <h1>Lung Cancer Prediction</h1>
+        <label for="file">Choose an image</label>
+        <input type="file" id="file" name="file" accept="image/*" onchange="displayFileName()">
+        <div id="file-name"></div>
+        <button type="submit">Predict</button>
+    </form>
+    <script>
+        async function displayFileName() {
+            const input = document.getElementById('file');
+            const fileNameDisplay = document.getElementById('file-name');
+            fileNameDisplay.textContent = "Selected file: " + input.files[0].name;
+
+            const formData = new FormData();
+            formData.append('file', input.files[0]);
+            const response = await fetch('/predict1', {
+                method: 'POST',
+                body: formData
+            });
+            const data = await response.json();
+            
+            // Set the prediction value to the hiddenx input field
+            const predictionInput = document.querySelector('input[name="prediction"]');
+            predictionInput.value = data.prediction;
+            
+            // Submit the form
+            const form = document.getElementById('predict-form');
+            form.submit();
+        }
+    </script>
+</body>
+</html>

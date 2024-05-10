@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nearest Clinics</title>
+    <style>
+        body {
+            background-color: cadetblue;
+        }
+        #map {
+            height: 500px;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <h1>Nearest Clinics</h1>
+    <div id="map"></div>
+
+    <script>
+        function initMap() {
+            // Initialize map
+            var map = new google.maps.Map(document.getElementById('map'), {
+                center: { lat: -34.397, lng: 150.644 },
+                zoom: 12
+            });
+
+            // Retrieve user's geolocation
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function(position) {
+                    var userLocation = {
+                        lat: position.coords.latitude,
+                        lng: position.coords.longitude
+                    };
+
+                    // Center map on user's location
+                    map.setCenter(userLocation);
+
+                    // Add marker for user's location
+                    var userMarker = new google.maps.Marker({
+                        position: userLocation,
+                        map: map,
+                        title: 'Your Location'
+                    });
+
+                    // Add nearby clinics
+                    var clinics = [
+                        { name: 'Eskag Sanjeevani Multispecialty Hospital - Baranagar', location: { lat: 22.646226665984877, lng: 88.37111562099712 } },
+                        { name: 'BAINE HOSPITAL', location: { lat: 22.64508538088071, lng: 88.3747400784577 } },
+                        { name: 'Baranagar General Hospital', location: { lat: 22.638829934011763, lng: 88.38039066596444 } },
+                        { name: 'Zenith Super Specialist Hospital', location: { lat: 22.664199539009932, lng: 88.37806100124222 } },
+                        { name: 'Charnock Hospital', location: { lat: 22.630653040515764, lng: 88.43484388034447 } },
+                        { name: 'ILS Hospitals, Salt lake', location: { lat: 22.597075137847888, lng: 88.41148237807396 } },
+                        { name: 'AMRI Hospital - Salt Lake', location: { lat: 22.576477679425487, lng: 88.41010106540593 } },
+                        { name: 'Ruby General Hospital', location: { lat: 22.513680004183293, lng: 88.40290282670466 } },
+                        { name: 'R G Kar Medical College and Hospital', location: { lat: 22.614151555625433, lng: 88.3781148352877 } },
+                        { name: 'Apollo Multispeciality Hospitals, Kolkata', location: { lat: 22.58413946170597, lng: 88.40038544552192 } },
+                        { name: 'Peerless Hospital', location: { lat: 22.482755455042984, lng: 88.394457071218 } },
+                        { name: 'R G Kar Medical College and Hospital', location: { lat: 22.614151555625433, lng: 88.3781148352877 } },
+                        { name: 'Desun Hospital', location: { lat: 22.51479990424782, lng: 88.51479990424782 } },
+                        { name: 'Narayana Hospital - RN Tagore Hospital, Mukundapur', location: { lat: 22.493268091499207, lng: 88.40235766036714 } },
+                        { name: 'AMRI Hospitals Dhakuria', location: { lat: 22.513785943811744, lng: 88.36781680426775 } },
+                        { name: 'RSV Hospital', location: { lat: 22.506729015160996, lng: 88.506729015160996 } },
+                        { name: 'Narayana Hospital, Howrah', location: { lat: 22.564670395643933, lng: 88.3075582950207 } },
+                        { name: 'Dum Dum Municipal Specialized Hospital and Cancer Research Center', location: { lat: 22.641689662568155, lng: 88.41416001033748 } },
+                        { name: 'M R Bangur Super Speciality Hospital', location: { lat: 22.49970129966502, lng: 88.34656309964586 } },
+                        { name: 'Tapan Sinha Memorial Hospital, Tollygunge, Kolkata', location: { lat: 22.488797641964773, lng: 88.34137558499098 } },
+                        { name: 'B.P. PODDAR HOSPITAL & MEDICAL RESEARCH LTD.', location: { lat: 22.512257778751746, lng: 88.33253885191179 } },
+                        { name: 'Fortis Hospital, Anandapur', location: { lat: 22.521793932167718, lng: 88.40068995809928 } },
+                        { name: 'BELUR ESI HOSPITAL', location: { lat: 22.637962524385593, lng: 88.32800927137403 } },
+                    ];
+
+                    // Add markers for nearby clinics
+                    clinics.forEach(function(clinic) {
+                        var marker = new google.maps.Marker({
+                            position: clinic.location,
+                            map: map,
+                            title: clinic.name
+                        });
+
+                        // Add event listener to open Google Maps when marker is clicked
+                        marker.addListener('click', function() {
+                            var mapsUrl = "https://www.google.com/maps?q=" + clinic.location.lat + "," + clinic.location.lng;
+                            window.open(mapsUrl, '_blank');
+                        });
+                    });
+                }, function() {
+                    // Handle geolocation error
+                    alert('Error: The Geolocation service failed.');
+                });
+            } else {
+                // Browser doesn't support geolocation
+                alert('Error: Your browser does not support geolocation.');
+            }
+        }
+    </script>
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDDyoiZZXy-zB8d4riE9XN5kSdBOPWDYAc&callback=initMap"></script>
+</body>
+</html>

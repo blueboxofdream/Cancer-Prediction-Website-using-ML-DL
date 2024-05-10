@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://kit.fontawesome.com/b9f2843f24.js"
+    crossorigin="anonymous"></script>
+    <style>
+
+    * {
+      margin: 0px;
+      font-family: Arial;
+      border: border-box;
+    }
+    body {
+    background: url('./static/bg-image.jpg') center/cover no-repeat;
+    }
+    .chat-icon {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      z-index: 999;
+      cursor: pointer;
+    }
+
+    .chat-icon img {
+      width: 70px; 
+      height: auto; 
+      border-radius: 40px;
+    }
+
+    .chat-window {
+      position: absolute;
+      bottom: calc(100% + 10px);
+      right: 0;
+      width: 300px; 
+      height: 400px; 
+      border: none;
+      border-radius: 10px;
+      box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+      display: none; 
+      z-index: 998;
+    }
+    .navbar {
+      height: 40px;
+      background-color: #222f3d;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+    }
+
+    ul {
+      display: flex;
+      list-style-type: none;
+    }
+    li {
+      margin-right: 20px;
+    }
+    nav ul li a {
+      text-decoration: none;
+      color: #cfe1f0;
+      position: relative;
+    }
+    nav ul li a::after{
+      content: '';
+      width: 0;
+      height: 3px;
+      background: rgb(137, 216, 248);
+      position: absolute;
+      left: 0;
+      bottom: -6px;
+      transition: 0.5s;
+    }
+    nav ul li a:hover::after{
+      width: 100%;
+    }
+
+
+    #content {
+      text-align: center;
+      padding: 95px 0 144px 0;
+      margin: 0 0 0 0;
+      background: rgba(0, 0, 0, 0.5);
+      border-radius: 0px;
+      width: 100%;
+      height: 500px;
+    }
+
+    #content div {
+    padding: 60px 0 0 0;
+    margin: 0 0 0 0;
+    }
+
+    .login-button {
+      background-color: #237993;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      
+    }
+    #content h1{
+      font-size: 70px;
+      color: rgb(137, 216, 248);
+      margin-top: 130px;
+    }
+    #content h2{
+      font-weight: lighter;
+      color: #ccc;
+      margin: 9px 0 12px 0;
+    }
+
+
+    .article-section {
+    margin: 0 0 140px 0;
+    padding: 0 0 0 0;
+    position: relative;
+    overflow: hidden;
+    width: 100%; 
+    background-color: #222f3d;
+    }
+
+    .article-container {
+    position: relative;
+    overflow-x: auto; 
+    white-space: nowrap; 
+    padding: 67px 0 67px 20px;
+    min-width: 420px;
+    display: flex; 
+      
+    }
+
+    .articles {
+      display: flex; 
+    }
+
+    .article {
+      width: 400px;
+      height: 200px;
+      padding: 20px;
+      margin-right: 20px;
+      background-color: #f0f0f0;
+      border: 1px solid #ccc;
+      overflow: hidden;
+      
+      white-space: nowrap;  
+    }
+
+    .article p {
+    margin: 26px 0 18px 0;
+    line-height: 1.6;
+    max-height: 200px;
+    overflow: hidden;
+    padding: 0 0 0 0;
+    }
+
+    .articles div {
+    background: #262626;
+    padding: 40px;
+    font-size: 13px;
+    font-weight: 300;
+    border-radius: 10px;
+    transition: background 0.5s, transform 0.5s;
+    }
+
+    .articles div:hover {
+    background: #237993;
+    transform: translateY(-10px);
+    }
+
+    .article {
+    color: whitesmoke;
+    }
+
+    .prev-btn,
+    .next-btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 30px;
+      height: 30px;
+      background-color: #333;
+      color: #fff;
+      border: none;
+      cursor: pointer;
+      z-index: 1; 
+    }
+
+    .prev-btn {
+      left: 0;
+    }
+
+    .next-btn {
+      right: 0;
+    }
+
+
+    .modal {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: rgba(0, 0, 0, 0.5); 
+      z-index: 1000; 
+    }
+
+    .modal-content {
+      background-color: #fefefe;
+      padding: 20px;
+      border-radius: 5px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.3); 
+      max-width: 80%; 
+    }
+
+    .close {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      font-size: 20px;
+      color: #aaa;
+      cursor: pointer;
+    }
+
+    .modal-article p {
+    max-height: none; 
+    overflow: visible; 
+    }
+
+    
+    .faqs-section {
+    margin-top:px;
+    padding-top: 10px;
+    background-color: #262626;
+    color: whitesmoke;
+    }
+
+    .faqs-section div {
+    margin: 24px 0 0 0;
+    padding: 0 0 21px 7px;
+    }
+
+    .faq {
+    margin-bottom: 20px;
+    }
+
+    .faq-question {
+    display: flex;
+    align-items: center;
+    cursor: pointer; 
+    }
+
+    .arrow {
+    margin-right: 10px;
+    }
+
+    .faq-answer {
+    display: none; 
+    margin: 19px 0 0 11px;
+    line-height: 1.6;
+    }
+
+    .faq div {
+    padding: 9px 0 4px 0;
+    margin: 16px 0 -8px 3px;
+    }
+
+    .faq-answer.show {
+    display: block; 
+    }
+
+    #Contact {
+    margin: 465px 0 0 0;
+    padding: 45px 0 0 0;
+    }
+    .Row {
+    padding: 20px 0 0 0;
+    background-color: #222f3d;
+    color: #ababab;
+    }
+    .Contact_left {
+    margin: 0 0 0 7px;
+    padding: 0 0 0 0;
+    }
+    .Contact_left p{
+    margin: 30px 0 0 0;
+    padding: 0 0 0 0;
+    }
+    .Contact_left p i{
+    color: #237993;
+    margin-right: 15px;
+    font-size: 25px;
+    }
+    .social-icons{
+    margin-top: 30px;
+    }
+    .social-icons a{
+    text-decoration: none;
+    font-size: 30px;
+    margin-right: 15px;
+    color: #ababab;
+    display: inline-block;
+    transition: transform 0.5s;
+    }
+    .social-icons a:hover{
+    color: #237993;
+    transform: translateY(-5px);
+    }
+        
+
+        
+    </style>
+    <script>
+        function redirectToLoginPage() {
+            window.location.href = "login.html";
+        }
+    </script>
+    <title>Home Page</title>
+</head>
+<body>
+    <header>
+        <div class="navbar">
+            <nav>
+                <ul>
+                    <li><a href="#content">Home</a></li>
+                    <li><a href="#article-section">Articles</a></li>
+                    <li><a href="#FAQs">FAQs</a></li>
+                    <li><a href="#Contact">Contact Us</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <div id="content">
+        <div>
+            <h1>Welcome to the Cancer Predictor</h1>
+            <h2>Cancer nowadays is increasing in an alarming rate without our consciousness.Our platform helps spreading awareness and also helps tracking our health by predicting the risk factor which in-turn ensures proper treatment.</h2>
+            <button class="login-button" onclick="redirectToLoginPage()">START YOUR PREDICTION</button>
+        </div>
+    </div>
+
+<div id="article-section" class="article-section">
+    <button class="prev-btn">&lt;</button>
+    <div class="article-container">
+        <div class="articles">
+            <div class="article">
+                <h1>What is cancer?</h1>
+                <p>Cancer is a disease in which some of the body's cells<br>grow uncontrollably and spread to other parts of the<br>
+                body.<br>
+
+                Cancer can start almost anywhere in the human body, which is made up of trillions of cells. Normally, human cells grow and multiply (through a process called cell division) to form new cells as the body needs them. When cells grow old or become damaged, they die, and new cells take their place.
+                    
+                Sometimes this orderly process breaks down, and abnormal or damaged cells grow and multiply when they shouldn't. These cells may form tumors, which are lumps of tissue. Tumors can be cancerous or not cancerous (benign). 
+                    
+                Cancerous tumors spread into, or invade, nearby tissues and can travel to distant places in the body to form new tumors (a process called metastasis). Cancerous tumors may also be called malignant tumors. Many cancers form solid tumors, but cancers of the blood, such as leukemias, generally do not.
+                    
+                Benign tumors do not spread into, or invade, nearby tissues. When removed, benign tumors usually don’t grow back, whereas cancerous tumors sometimes do. Benign tumors can sometimes be quite large, however. Some can cause serious symptoms or be life threatening, such as benign tumors in the brain.</p>
+                <a href="#" class="read-more" onclick="toggleTypesOfCancer()">Read More</a>
+            </div>
+            <div class="article">
+                <h1>Cancer cell</h1>
+                <p>Cancer cells are cells that divide continually, forming <br> solid tumors or flooding the blood or lymph with <br>abnormal cells. Cell division is a normal process used <br>by the body for growth and repair. A parent cell divides to form two daughter cells, and these daughter cells are used to build new tissue or to replace cells that have died because of aging or damage. Healthy cells stop dividing when there is no longer a need for more daughter cells, but cancer cells continue to produce copies. They are also able to spread from one part of the body to another in a process known as metastasis.
+                Cancer cells are created when the genes responsible for regulating cell division are damaged. Carcinogenesis is caused by mutation and epimutation of the genetic material of normal cells, which upsets the normal balance between proliferation and cell death. This results in uncontrolled cell division in the body. The uncontrolled and often rapid proliferation of cells can lead to benign or malignant tumours (cancer). Benign tumors do not spread to other parts of the body or invade other tissues. Malignant tumors can invade other organs, spread to distant locations (metastasis) and become life-threatening.
+
+                More than one mutation is necessary for carcinogenesis. In fact, a series of several mutations to certain classes of genes is usually required before a normal cell will transform into a cancer cell.
+                    
+                Damage to DNA can be caused by exposure to radiation, chemicals, and other environmental sources, but mutations also accumulate naturally over time through uncorrected errors in DNA transcription, making age another risk factor. Oncoviruses can cause certain types of cancer, and genetics are also known to play a role.
+                    
+                Stem cell research suggests that excess SP2 protein may turn stem cells into cancer cells.However, a lack of particular co-stimulated molecules that aid in the way antigens react with lymphocytes can impair the natural killer cells' function, ultimately leading to cancer.
+                </p>
+                <a href="#" class="read-more" onclick="toggleTypesOfCancer()">Read More</a>
+            </div>
+            <div class="article">
+                <h1>How does cancer start<br> in your body?</h1>
+                <p>Cancer starts when a gene or several genes mutate and<br> create cancerous cells. These cells create cancer<br> clusters, or tumors. Cancerous cells may break away from tumors, using your lymphatic system or bloodstream to travel to other areas of your body. (Healthcare providers call this metastasis.)
+
+                For example, a tumor in your breast may spread to your lungs, making it hard for you to breathe. In some types of blood cancer, abnormal cells in your bone marrow make abnormal blood cells that multiply uncontrollably. Eventually, the abnormal cells crowd out normal blood cells.
+                </p>
+                <a href="#" class="read-more" onclick="toggleTypesOfCancer()">Read More</a>
+            </div>
+            <div class="article">
+                <h1>Types of Cancer</h1>
+                <p>According to the American Cancer Society, 1 in 2 men<br> and people assigned male at birth (AMAB) and 1 in 3<br>women and people assigned female at birth (AFAB) will <br>develop cancer. As of 2019, more than 16.9 million people in the U.S. were living with cancer.The most common cancers in the United States are:
+
+                Breast cancer: Breast cancer is the most common type of cancer. It mostly affects women and people AFAB. But about 1% of all breast cancer cases affect men and people AMAB.
+                Lung cancer: Lung cancer is the second most common cancer. There are two types of lung cancer: non-small cell cancer and small cell lung cancer.
+                Prostate cancer: This cancer affects 1 in 9 men and people AMAB.
+                Colorectal cancer: Colon cancer and rectal cancer affect different parts of your digestive system.
+                Blood cancers: Leukemia and lymphoma are the most common blood cancers.</p>
+                <a href="#" class="read-more" onclick="toggleTypesOfCancer()">Read More</a>
+            </div>
+            <div class="article">
+                <h1>Symptoms and Causes</h1>
+                <p>Cancer is a complicated disease. You can have cancer<br> for years without developing symptoms. Other times,<br> cancer may cause noticeable symptoms that get worse <br>very quickly. Many cancer symptoms resemble other, less serious illnesses. Having certain symptoms doesn’t mean you have cancer. In general, you should talk to a healthcare provider anytime there’s a change in your body that lasts for more than two weeks.
+                First symptoms of cancer Some common early cancer symptoms include:
+
+                Unexplained weight loss.
+                Chronic tiredness.
+                Persistent pain.
+                Fever that occurs mostly at night.
+                Skin changes, particularly moles that change shape and size or new moles.
+                Left untreated, cancer may cause additional symptoms, including:
+
+                Bruising or bleeding more easily.
+                Lumps or bumps under your skin that don’t go away.
+                Difficulty breathing.
+                Difficulty swallowing.
+                Cancer is a genetic disorder. It happens when genes that manage cell activity mutate and create abnormal cells that divide and multiply, eventually disrupting how your body works.
+
+                Medical researchers estimate 5% to 12% of all cancers are caused by inherited genetic mutations that you can’t control.
+
+                More frequently, cancer happens as an acquired genetic mutation. Acquired genetic mutations happen over the course of your life. Medical researchers have identified several risk factors that increase your chance of developing cancer.
+                </p>
+                <a href="#" class="read-more" onclick="toggleTypesOfCancer()">Read More</a>
+            </div>
+            <div class="article">
+                <h1>Risk factors</h1>
+                <p>Smoking: Smoking cigarettes and cigars and using<br> e-cigarettes increases your chance of developing lung,<br> pancreatic, esophageal and oral cancer.
+                Diet: Eating<br> high-fat or high-sugar foods can increase your risk for many types of cancer. You’re also more vulnerable to disease if you don’t get enough exercise.
+                Environment: Exposure to toxins in your environment — such as asbestos, pesticides and radon — can eventually lead to cancer.
+                Radiation exposure: Ultraviolet (UV) radiation from the sun significantly increases your risk of developing skin cancer. Over-exposure to radiation treatment can also be a risk factor.
+                Hormone therapy: Women and people AFAB taking hormone replacement therapy may have an increased risk for breast cancer and endometrial cancer.</p>
+                <a href="#" class="read-more" onclick="toggleTypesOfCancer()">Read More</a>
+            </div>
+            <div class="article">
+                <h1>What should you do?</h1>
+                <p>You can reduce your risk by changing some of your<br> lifestyle choices:
+
+                If you smoke or use tobacco, try to<br> stop. Ask a healthcare provider about smoking cessation<br> programs that can help you quit tobacco.
+                Follow a diet plan that’s healthy for you. If you want help managing your weight, ask a healthcare provider about nutritional guidance and weight management programs.
+                Add exercise to your daily routine. Exercise may boost your immune system so it provides more protection against cancer.
+                Avoid toxins, including asbestos, radon and pesticides.
+                Protect yourself against sun damage.
+                Have regular cancer screenings.</p>
+                <a href="#" class="read-more" onclick="toggleTypesOfCancer()">Read More</a>
+            </div>
+            <div class="article">
+                <h1>Let's talk</h1>
+                <p>Healthcare providers begin a cancer diagnosis by doing<br> a comprehensive physical examination. They’ll ask you<br> to describe your symptoms. They may ask about your<br> family medical history. They may also do the following tests:
+                Blood tests.
+                Imaging tests.
+                Biopsies.
+                If you harbor any concerns about the possibility of cancer, we invite you to explore our website for early detection tools to assess your risk. Our platform offers guidance on interpreting diagnostic images and connects you with expert physicians who can provide personalized advice for your well-being. Empower yourself to take proactive steps in cancer prevention and safeguard the health of you and your loved ones.
+                </p>
+                <a href="#" class="read-more" onclick="toggleTypesOfCancer()">Read More</a>
+            </div>
+        </div>
+    </div>
+    <button class="next-btn">&gt;</button>
+</div>
+
+<div id="article-modal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2 class="modal-title">Article Title</h2>
+        <p class="modal-article">Full article text goes here...</p>
+    </div>
+</div>
+
+
+<div id="FAQs" class="faqs-section">
+    <div>
+        <h3>Frequently Asked Questions</h3>
+    <div class="faq">
+        <div class="faq-question">
+            <span class="arrow">▶</span>
+            <h4>Can cancer be prevented?</h4>
+        </div>
+        <p class="faq-answer">While not all cancers can be prevented, there are steps individuals can take to reduce their risk, such as maintaining a healthy lifestyle, avoiding tobacco and excessive alcohol consumption, protecting against UV radiation, getting vaccinated against cancer-causing infections, and participating in cancer screening programs.</p>
+    </div>
+    <div class="faq">
+        <div class="faq-question">
+            <span class="arrow">▶</span>
+            <h4>What are 90% of human cancers due to?</h4>
+        </div>
+        <p class="faq-answer">Over 90% of cancers are observed to have some type of genetic alteration. Some of these alterations are inherited, while others are sporadic, which means they occur by chance or occur from environmental exposures (usually over many years).
+        </p>
+    </div>
+    <div class="faq">
+        <div class="faq-question">
+            <span class="arrow">▶</span>
+            <h4>Is cancer is Genetic?
+            </h4>
+        </div>
+        <p class="faq-answer">All cancer is triggered by altered genes. However, only five to 10 per cent of cancers are actually hereditary. Heredity may sometimes appear to be the reason for a cancer, especially when the same types of cancers run in families.
+        </p>
+    </div>
+    <div class="faq">
+        <div class="faq-question">
+            <span class="arrow">▶</span>
+            <h4>Are some cancers 100% curable?
+            </h4>
+        </div>
+        <p class="faq-answer">There is currently no cure for cancer. However, successful treatment can result in cancer going into remission, which means that all signs of it have gone. The early detection and treatment of cancer can significantly improve the chances of remission and a person's outlook.
+        </p>
+    </div>
+    <div class="faq">
+        <div class="faq-question">
+            <span class="arrow">▶</span>
+            <h4>Which cancers spread the fastest?
+            </h4>
+        </div>
+        <p class="faq-answer">The fastest-moving cancers are pancreatic, brain, esophageal, liver, and melanoma. Pancreatic cancer is one of the most dangerous types of cancer because it's fast-moving, and there's no method of early detection.
+        </p>
+    </div>
+    <div class="faq">
+        <div class="faq-question">
+            <span class="arrow">▶</span>
+            <h4>How fast can cancers grow?
+            </h4>
+        </div>
+        <p class="faq-answer">Because every cancer is different, there's no universal rate at which all cancers grow. Some cancers tend to remain in place and not grow much at all. Others grow slowly—so slowly that they may never require treatment.
+        </p>
+    </div>
+    </div>
+</div>
+
+
+<div id="Contact">
+    <div class="Row">
+        <div class="Contact_left">
+            <h1 class="Sub_title">
+                Contact Me
+            </h1>
+            <p><i class="fa-solid fa-paper-plane"></i>lungcancerprediction.gmail.com</p>
+            <p><i class="fa-solid fa-square-phone"></i>+91 1234567890</p>
+        </div>
+        <div class="social-icons">
+            <a href="https://www.facebook.com/aindri.ghosal?mibextid=ZbWKwL"><i class="fa-brands fa-facebook"></i></a>
+            <a href="https://twitter.com/AindriGhoshal?t=s_0FlYeNwGMN8fsklbbWFg&s=08"><i class="fa-brands fa-twitter"></i></a>
+            <a href="https://instagram.com/aindri_irl_?igshid=ZDdkNTZiNTM="><i class="fa-brands fa-square-instagram"></i></a>
+            <a href="https://www.linkedin.com/in/aindrighoshal0701"><i class="fa-brands fa-linkedin"></i></a>
+        </div>
+    </div>
+</div>
+
+
+    <div class="chat-icon" id="chat-icon">
+        <img src="./static/chat-icon.png" alt="Chat Icon">
+        <iframe class="chat-window" id="chat-window" src="https://console.dialogflow.com/api-client/demo/embedded/e8b137f6-6e40-4a4f-b8b1-819042ec46d6" frameborder="0"></iframe>
+    </div>
+    <script>
+document.addEventListener("DOMContentLoaded", function() {
+    const chatIcon = document.getElementById('chat-icon');
+    const chatWindow = document.getElementById('chat-window');
+  
+    chatIcon.addEventListener('click', function() {
+      chatWindow.style.display = chatWindow.style.display === 'none' ? 'block' : 'none';
+    });
+  });
+
+
+
+
+function openModal(event) {
+  event.preventDefault();
+  const modal = document.getElementById('article-modal');
+  const article = event.target.closest('.article');
+  const title = article.querySelector('h1').textContent;
+  const articleContent = article.querySelector('p').textContent;
+  modal.querySelector('.modal-title').textContent = title;
+  modal.querySelector('.modal-article').textContent = articleContent;
+  modal.style.display = 'block';
+}
+
+function closeModal() {
+  document.getElementById('article-modal').style.display = 'none';
+}
+
+const readMoreLinks = document.querySelectorAll('.read-more');
+readMoreLinks.forEach(link => {
+  link.addEventListener('click', openModal);
+});
+
+function toggleTypesOfCancer() {
+  const content = document.getElementById('types-of-cancer-content');
+  content.style.display = (content.style.display === 'none' || content.style.display === '') ? 'block' : 'none';
+}
+
+
+
+
+const closeButton = document.querySelector('.close');
+closeButton.addEventListener('click', closeModal);
+
+
+const prevBtn = document.querySelector('.prev-btn');
+prevBtn.addEventListener('click', () => {
+    const articleContainer = document.querySelector('.article-container');
+    articleContainer.scrollLeft -= 3400; 
+});
+
+const nextBtn = document.querySelector('.next-btn');
+nextBtn.addEventListener('click', () => {
+    const articleContainer = document.querySelector('.article-container');
+    articleContainer.scrollLeft += 3400; 
+});
+
+
+document.addEventListener('DOMContentLoaded', function() {
+  const faqQuestions = document.querySelectorAll('.faq-question');
+
+  faqQuestions.forEach(function(question) {
+      question.addEventListener('click', function() {
+          const answer = question.nextElementSibling; 
+          answer.classList.toggle('show'); 
+      });
+  });
+});
+
+    </script>
+</body>
+</html> 
+<script>
+    function redirectToLoginPage() {
+        window.location.href = "login.html";
+    }
+</script>
+<title>Home Page</title>

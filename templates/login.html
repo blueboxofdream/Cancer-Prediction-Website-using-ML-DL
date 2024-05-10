@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background: rgba(255, 255, 255, 0.3) url('./static/loginpic.jpg') center/cover no-repeat;
+        }
+        h2 {
+            font-size: 40px;
+            color: rgb(224, 190, 110);
+        }
+
+        .login-form, .signup-form {
+            display: none; 
+        }
+
+        .login-form {
+            text-align: center;
+            padding: 20px;
+            background: #4793AF;
+            border-radius: 10px;
+            width: 500px;
+            height: 400px;
+            box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px;
+        }
+
+        .signup-form {
+            text-align: center;
+            padding: 20px;
+            background: #2d88a7;
+            border-radius: 10px;
+            width: 500px;
+            height: 400px;
+            margin:10px;
+            box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px;
+        }
+
+        .login-signup {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        input {
+            margin-bottom: 10px;
+            padding: 10px;
+            width: 90%;
+            box-sizing: border-box;
+            margin-top: 20px;
+            border-radius: 5px;
+        }
+        form {
+            margin-top: 20px;
+        }
+
+        .error-message {
+            color: red;
+            margin-top: 5px;
+        }
+
+        #b1, #b2 {
+            background: rgb(206, 174, 98) !important;
+            color: rgb(11, 10, 10);
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        #b1:hover,
+        #b2:hover {
+            background-color: #19617b;
+            color: #fff;
+        }
+
+    </style>
+    <title>Login Page</title>
+</head>
+<body>
+    <div class="login-signup">
+        <div class="login-form" id="loginForm" style="display: block;"> 
+            <h2>Login</h2>
+            <!-- <form onsubmit="return validateForm()"> -->
+            <form>
+                <input type="email" id="email" placeholder="Email" required pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}">
+                <input type="password" id="password" placeholder="Password" required>
+                <button id='b1' type="submit">Login</button>
+            </form>
+            <p>New user? <a href="#" id="signupLink">Signup</a></p>
+            <p><a href="#" id="forgotPasswordLink">Forgot Password?</a></p>
+        </div>
+        <div class="signup-form" id="signupForm">
+            <h2>Signup</h2>
+            <!-- <form onsubmit="return validateForm()"> -->
+            <form>
+                <input type="email" id="signupEmail" placeholder="Email" required pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}">
+                <input type="password" id="signupPassword" placeholder="Password" required>
+                <button id='b2' type="submit">Signup</button>
+            </form>
+            <p>Already have an account? <a href="#" id="loginLink">Login</a></p>
+
+
+
+            <!-- <p id="emailErrorMessage" class="error-message"></p> -->
+
+        </div>
+    </div>
+
+    <script>
+        const loginForm = document.getElementById('loginForm');
+        const signupForm = document.getElementById('signupForm');
+        const signupLink = document.getElementById('signupLink');
+        const loginLink = document.getElementById('loginLink');
+
+
+        // function validateForm() {
+        //     var email = document.getElementById('email').value;
+        //     var emailErrorMessage = document.getElementById('emailErrorMessage');
+        //     // Validate email
+        //     if (!email.includes('@') || !email.includes('.com')) {
+        //         emailErrorMessage.textContent = 'Invalid email format';
+        //         return false;
+        //     } else {
+        //         emailErrorMessage.textContent = '';
+        //     }
+        //     return true;
+        // }
+
+
+        signupLink.addEventListener('click', function(event) {
+            event.preventDefault();
+            loginForm.style.display = 'none';
+            signupForm.style.display = 'block';
+        });
+
+        loginLink.addEventListener('click', function(event) {
+            event.preventDefault();
+            loginForm.style.display = 'block';
+            signupForm.style.display = 'none';
+        });
+
+        document.getElementById('loginForm').addEventListener('submit', function(event) {
+        event.preventDefault();
+        
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+        
+        // // Basic email format validation
+        // if (!isValidEmail(email)) {
+        //     alert('Please enter a valid email address');
+        //     return;
+        // }
+
+        // // Additional validation to check for ".com"
+        // if (!email.includes('.com')) {
+        //     alert('Please enter a valid email address with ".com"');
+        //     return;
+        // }
+
+        fetch('/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ username: email, password })
+        })
+        .then(response => {
+            if (response.ok) {
+                alert('Login successful');
+
+                window.location.href = "/home";
+            } else {
+                alert('Login failed');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    });
+
+    function validateForm(eMail) {
+            var email = eMail
+            
+            // Validate email
+            if (!email.includes('@') || !email.includes('.com')) {
+                emailErrorMessage.textContent = 'Invalid email format';
+                return false;
+            } 
+            return true;
+        }
+
+    document.getElementById('signupForm').addEventListener('submit', function(event) {
+        event.preventDefault();
+        
+        const email = document.getElementById('signupEmail').value;
+        const password = document.getElementById('signupPassword').value;
+        if(validateForm(email)){
+        fetch('/signup', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ username: email, password })
+        })
+        .then(response => {
+            if (response.ok) {
+                alert('Signup successful');
+
+                window.location.href = "login.html";
+            } else {
+                alert('Signup failed');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    }
+    else {
+                alert('Enter valid email');
+            }
+    });
+
+    document.getElementById('forgotPasswordLink').addEventListener('click', function(event) {
+    event.preventDefault();
+    
+    const email = document.getElementById('email').value;
+
+    fetch('/forgot_password', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ username: email }) // Adjusted payload
+    })
+    .then(response => {
+        if (response.ok) {
+            alert('Your account has been deleted. Please sign up again.');
+            window.location.href = "signup.html"; // Redirect to signup page
+        } else if (response.status === 404) {
+            // Handle case where user account doesn't exist
+            alert('User not found. Please check your email and try again.');
+        } else {
+            // Handle other errors
+            alert('Failed to delete your account. Please try again later.');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+});
+
+    </script>
+</body>
+</html>
