@@ -202,7 +202,7 @@ async def predict(request: Request, file: UploadFile = File(None)):
         print("Prediction:", prediction)
         print("Predicted class:", predicted_class)
 
-        redirect_url = f"https://cancer-prediction-website-using-ml-dl-1.onrender.com/result?prediction={predicted_class}"
+        redirect_url = f"https://cancer-prediction-website-using-ml-dl-1.onrender.com/result1?prediction={predicted_class}"
         return RedirectResponse(url=redirect_url)
         # return RedirectResponse(url=f"/result1?prediction={predicted_class}")
 
