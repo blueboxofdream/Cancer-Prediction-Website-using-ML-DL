@@ -55,24 +55,24 @@ class UserLogin(BaseModel):
 class ForgotUser(BaseModel):
     username: str
 
-origins = ["http://lcp.ssa.onrender.com"]
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=origins,
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
+# origins = ["http://lcp.ssa.onrender.com"]
+# app.add_middleware(
+#     CORSMiddleware,
+#     allow_origins=origins,
+#     allow_credentials=True,
+#     allow_methods=["*"],
+#     allow_headers=["*"],
+# )
 
 
-model = load_model('model2_fit.h5')
+model = load_model('./static/model2_fit.h5')
 
 
 classes = ['Bengin cases', 'Malignant cases', 'Normal cases']
 
 
 try:
-    joblib_in = open("model_fit.joblib", "rb")
+    joblib_in = open("./static/model_fit.joblib", "rb")
     model_fit = joblib.load(joblib_in)
 except Exception as e:
     print(f"An error occurred while loading the model: {e}")
