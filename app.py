@@ -166,7 +166,10 @@ async def predict_lungcancer(request: Request, AGE: int = Form(...), SMOKING: in
 
     prediction = "You have LOW RISK of Lung Cancer" if prediction_value[0] < 0.5 else "You have HIGH RISK of Lung Cancer"
 
-    return RedirectResponse(url=f"/result?prediction={prediction}")
+    redirect_url = f"https://cancer-prediction-website-using-ml-dl-1.onrender.com/result?prediction={prediction}"
+    return RedirectResponse(url=redirect_url)
+    # return RedirectResponse(url=f"/result?prediction={prediction}")
+
 
 @app.route("/result", methods=["GET", "POST"])
 async def show_result(request: Request):
@@ -198,7 +201,10 @@ async def predict(request: Request, file: UploadFile = File(None)):
         predicted_class = classes[predicted_class_index]
         print("Prediction:", prediction)
         print("Predicted class:", predicted_class)
-        return RedirectResponse(url=f"/result1?prediction={predicted_class}")
+
+        redirect_url = f"https://cancer-prediction-website-using-ml-dl-1.onrender.com/result?prediction={predicted_class}"
+        return RedirectResponse(url=redirect_url)
+        # return RedirectResponse(url=f"/result1?prediction={predicted_class}")
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
